@@ -23,8 +23,16 @@
     "@typescript-eslint",
     "prettier"
   ],
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "out/",
+    "next-env.d.ts"
+  ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "warn",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 }
