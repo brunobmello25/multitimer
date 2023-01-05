@@ -27,7 +27,8 @@
     "node_modules/",
     "dist/",
     "out/",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    "tailwind.config.cjs"
   ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "warn",
