@@ -1,10 +1,23 @@
 import { useEffect, useState } from 'react';
+import ShortUniqueId from 'short-unique-id';
+
+const uid = new ShortUniqueId({ length: 8 });
 
 export function useTimer(): Value {
   const [timers, setTimers] = useState<Timer[]>([]);
 
-  const addTimer = (timer: Timer): void => {
-    setTimers([...timers, timer]);
+  const addTimer = (name: string, value: number): void => {
+    setTimers([
+      ...timers,
+      {
+        id: uid(),
+        name,
+        current: value,
+        default: value,
+        isPaused: false,
+        isStarted: false,
+      },
+    ]);
   };
 
   const removeTimer = (id: string): void => {
