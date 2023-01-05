@@ -1,10 +1,11 @@
 import { type NextPage } from 'next';
 import { FiPlusCircle } from 'react-icons/fi';
-import { Header, TimerCard } from '../components';
-import { useTimer } from '../hooks';
+import { AddTimerModal, Header, TimerCard } from '../components';
+import { useModal, useTimer } from '../hooks';
 
 const Home: NextPage = () => {
-  const { timers, addTimer } = useTimer();
+  const { timers } = useTimer();
+  const { pushModal } = useModal();
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gray-600">
@@ -23,14 +24,7 @@ const Home: NextPage = () => {
           <button
             className="flex min-h-[180px] items-center justify-center rounded-xl border-8 border-gray-500 bg-gray-600"
             onClick={() => {
-              addTimer({
-                isStarted: false,
-                isPaused: false,
-                id: 'sduihfadshfua',
-                default: 120,
-                current: 43,
-                name: 'Teste',
-              });
+              pushModal(<AddTimerModal />);
             }}
           >
             <FiPlusCircle className="text-gray-500" size={40} />
