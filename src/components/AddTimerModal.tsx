@@ -1,6 +1,6 @@
 import { FiPlusCircle } from 'react-icons/fi';
 import { useState } from 'react';
-import InputMask from 'react-input-mask'
+import InputMask from 'react-input-mask';
 
 import { useModal, useTimer } from '../hooks';
 import { readableTimeToSeconds } from '../utils/time';
@@ -16,12 +16,6 @@ export function AddTimerModal(): JSX.Element {
 
   const { popModal } = useModal();
 
-  /*
-   * This regex matches the minutes and seconds (MM:SS) or hours minutes and seconds (HH:MM:SS) portions of the time.
-   * The [0-9]{2} part matches two digits between 0 and 9.
-   * The : after each set of brackets is required if the preceding portion is present.
-   * The ? after the first set of brackets makes the whole hours portion optional.
-   * */
   const validDuration = duration.match(validTimeRegex) !== null;
 
   const validForm = name !== '' && validDuration;
