@@ -1,5 +1,3 @@
-import type React from 'react';
-
 export function secondsToReadableTime(value: number): string {
   let readable = '';
 

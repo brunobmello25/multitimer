@@ -1,10 +1,10 @@
 import type { IconType } from 'react-icons';
 
-interface Props {
+type Props = {
   onClick?: () => void;
   size?: number;
   icon: IconType;
-}
+};
 
 export function IconButton({
   icon: Icon,

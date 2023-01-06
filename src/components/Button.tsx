@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react';
 
-interface Props {
+type Props = {
   onClick?: () => void;
-}
+};
 
 export function Button({
   children,
