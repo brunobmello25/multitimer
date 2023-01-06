@@ -5,6 +5,8 @@ const uid = new ShortUniqueId({ length: 8 });
 
 export const TimerContext = createContext<Value | null>(null);
 
+const LOCAL_STORAGE_KEY = 'multitimer:timers';
+
 export function TimerProvider({
   children,
 }: {
@@ -13,7 +15,7 @@ export function TimerProvider({
   const [timers, setTimers] = useState<Timer[]>([]);
 
   const addTimer = (name: string, duration: number): void => {
-    setTimers([
+    const newTimers = [
       ...timers,
       {
         id: uid(),
@@ -23,11 +25,19 @@ export function TimerProvider({
         paused: false,
         started: false,
       },
-    ]);
+    ];
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newTimers));
+
+    setTimers(newTimers);
   };
 
   const removeTimer = (id: string): void => {
-    setTimers(timers.filter((timer) => timer.id !== id));
+    const newTimers = timers.filter((timer) => timer.id !== id);
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newTimers));
+
+    setTimers(newTimers);
   };
 
   const startTimer = (id: string): void => {
@@ -74,6 +84,14 @@ export function TimerProvider({
       }),
     );
   };
+
+  useEffect(() => {
+    const storedTimers = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+    if (storedTimers !== null) {
+      setTimers(JSON.parse(storedTimers));
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

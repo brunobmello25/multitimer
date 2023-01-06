@@ -56,7 +56,7 @@ export function AddTimerModal(): JSX.Element {
           <InputMask
             className="mt-2 w-full rounded-xl bg-gray-500 px-3 py-2 text-white"
             type="text"
-            placeholder="1:59:59"
+            placeholder="HH:MM:SS"
             value={duration}
             onChange={(e) => {
               setDuration(e.target.value);
