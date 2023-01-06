@@ -1,6 +1,6 @@
 import { type AppType } from 'next/dist/shared/lib/utils';
 import Head from 'next/head';
-import { ModalProvider } from '../hooks';
+import { ModalProvider, TimerProvider } from '../hooks';
 
 import '../styles/globals.css';
 
@@ -13,9 +13,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ModalProvider>
-        <Component {...pageProps} />
-      </ModalProvider>
+      <TimerProvider>
+        <ModalProvider>
+          <Component {...pageProps} />
+        </ModalProvider>
+      </TimerProvider>
     </>
   );
 };

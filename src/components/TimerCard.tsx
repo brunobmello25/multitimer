@@ -1,7 +1,10 @@
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiTrash2 } from 'react-icons/fi';
+import { useTimer } from '../hooks';
 import { Button, IconButton } from './';
 
-export function TimerCard({ name, value }: Props): JSX.Element {
+export function TimerCard({ id, name, value }: Props): JSX.Element {
+  const { removeTimer } = useTimer();
+
   const hours = Math.floor(value / 3600);
   const minutes = Math.floor((value % 3600) / 60);
   const seconds = Math.floor(value % 60);
@@ -9,8 +12,12 @@ export function TimerCard({ name, value }: Props): JSX.Element {
   return (
     <div className="flex flex-col rounded-xl bg-gray-500 p-3 text-white">
       <div className="col-start-3 col-end-3 flex justify-end gap-x-2">
-        <IconButton icon={FiEdit} />
-        <IconButton icon={FiTrash2} />
+        <IconButton
+          icon={FiTrash2}
+          onClick={() => {
+            removeTimer(id);
+          }}
+        />
       </div>
 
       <div className="p-2">
@@ -33,6 +40,7 @@ export function TimerCard({ name, value }: Props): JSX.Element {
 }
 
 type Props = {
+  id: string;
   name: string;
   value: number;
 };

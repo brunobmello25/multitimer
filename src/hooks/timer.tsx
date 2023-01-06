@@ -1,19 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import ShortUniqueId from 'short-unique-id';
 
 const uid = new ShortUniqueId({ length: 8 });
 
-export function useTimer(): Value {
+export const TimerContext = createContext<Value | null>(null);
+
+export function TimerProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   const [timers, setTimers] = useState<Timer[]>([]);
 
-  const addTimer = (name: string, value: number): void => {
+  const addTimer = (name: string, duration: number): void => {
     setTimers([
       ...timers,
       {
         id: uid(),
         name,
-        current: value,
-        default: value,
+        current: duration,
+        default: duration,
         isPaused: false,
         isStarted: false,
       },
@@ -68,32 +74,48 @@ export function useTimer(): Value {
     );
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimers(
-        timers.map((timer) => {
-          if (timer.isStarted && !timer.isPaused) {
-            return { ...timer, current: timer.current - 1 };
-          }
-          return timer;
-        }),
-      );
-    }, 1000);
+  // TODO: fix this broken use effect
+  /* useEffect(() => { */
+  /*   const interval = setInterval(() => { */
+  /*     setTimers( */
+  /*       timers.map((timer) => { */
+  /*         if (timer.isStarted && !timer.isPaused) { */
+  /*           return { ...timer, current: timer.current - 1 }; */
+  /*         } */
+  /*         return timer; */
+  /*       }), */
+  /*     ); */
+  /*   }, 1000); */
+  /*   return () => { */
+  /*     clearInterval(interval); */
+  /*   }; */
+  /* }, [timers]); */
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timers]);
+  return (
+    <TimerContext.Provider
+      value={{
+        addTimer,
+        pauseTimer,
+        removeTimer,
+        resetTimer,
+        resumeTimer,
+        startTimer,
+        timers,
+      }}
+    >
+      {children}
+    </TimerContext.Provider>
+  );
+}
 
-  return {
-    addTimer,
-    pauseTimer,
-    removeTimer,
-    resetTimer,
-    resumeTimer,
-    startTimer,
-    timers,
-  };
+export function useTimer(): Value {
+  const context = useContext(TimerContext);
+
+  if (context === null) {
+    throw new Error('useTimer must be used within a TimerProvider');
+  }
+
+  return context;
 }
 
 export type Timer = {
@@ -107,7 +129,7 @@ export type Timer = {
 
 type Value = {
   timers: Timer[];
-  addTimer: (timer: Timer) => void;
+  addTimer: (name: string, duration: number) => void;
   removeTimer: (id: string) => void;
   startTimer: (id: string) => void;
   pauseTimer: (id: string) => void;

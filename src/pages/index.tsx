@@ -19,7 +19,12 @@ const Home: NextPage = () => {
           }}
         >
           {timers.map((timer) => (
-            <TimerCard key={timer.id} value={timer.current} name={timer.name} />
+            <TimerCard
+              key={timer.id}
+              id={timer.id}
+              value={timer.current}
+              name={timer.name}
+            />
           ))}
           <button
             className="flex min-h-[180px] items-center justify-center rounded-xl border-8 border-gray-500 bg-gray-600"
