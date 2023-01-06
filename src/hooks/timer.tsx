@@ -20,8 +20,8 @@ export function TimerProvider({
         name,
         current: duration,
         default: duration,
-        isPaused: false,
-        isStarted: false,
+        paused: false,
+        started: false,
       },
     ]);
   };
@@ -34,72 +34,55 @@ export function TimerProvider({
     setTimers(
       timers.map((timer) => {
         if (timer.id === id) {
-          return { ...timer, isStarted: true };
+          return {
+            ...timer,
+            started: true,
+            paused: false,
+          };
         }
         return timer;
       }),
     );
   };
 
-  const pauseTimer = (id: string): void => {
+  const stopTimer = (id: string): void => {
     setTimers(
       timers.map((timer) => {
         if (timer.id === id) {
-          return { ...timer, isPaused: true };
+          return {
+            ...timer,
+            current: timer.default,
+            started: false,
+            paused: false,
+          };
         }
         return timer;
       }),
     );
   };
 
-  const resumeTimer = (id: string): void => {
+  const toggleTimerPause = (id: string): void => {
     setTimers(
       timers.map((timer) => {
         if (timer.id === id) {
-          return { ...timer, isPaused: false };
+          return {
+            ...timer,
+            paused: !timer.paused,
+          };
         }
         return timer;
       }),
     );
   };
-
-  const resetTimer = (id: string): void => {
-    setTimers(
-      timers.map((timer) => {
-        if (timer.id === id) {
-          return { ...timer, current: timer.default };
-        }
-        return timer;
-      }),
-    );
-  };
-
-  // TODO: fix this broken use effect
-  /* useEffect(() => { */
-  /*   const interval = setInterval(() => { */
-  /*     setTimers( */
-  /*       timers.map((timer) => { */
-  /*         if (timer.isStarted && !timer.isPaused) { */
-  /*           return { ...timer, current: timer.current - 1 }; */
-  /*         } */
-  /*         return timer; */
-  /*       }), */
-  /*     ); */
-  /*   }, 1000); */
-  /*   return () => { */
-  /*     clearInterval(interval); */
-  /*   }; */
-  /* }, [timers]); */
 
   return (
     <TimerContext.Provider
       value={{
         addTimer,
-        pauseTimer,
         removeTimer,
-        resetTimer,
-        resumeTimer,
         startTimer,
+        stopTimer,
+        toggleTimerPause,
         timers,
       }}
     >
@@ -123,8 +106,8 @@ export type Timer = {
   name: string;
   default: number;
   current: number;
-  isStarted: boolean;
-  isPaused: boolean;
+  started: boolean;
+  paused: boolean;
 };
 
 type Value = {
@@ -132,7 +115,6 @@ type Value = {
   addTimer: (name: string, duration: number) => void;
   removeTimer: (id: string) => void;
   startTimer: (id: string) => void;
-  pauseTimer: (id: string) => void;
-  resumeTimer: (id: string) => void;
-  resetTimer: (id: string) => void;
+  stopTimer: (id: string) => void;
+  toggleTimerPause: (id: string) => void;
 };

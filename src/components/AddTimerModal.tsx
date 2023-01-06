@@ -11,7 +11,6 @@ export function AddTimerModal(): JSX.Element {
   const [name, setName] = useState('');
   const [duration, setDuration] = useState('');
 
-  console.log({ name, duration });
   const { addTimer } = useTimer();
 
   const { popModal } = useModal();
