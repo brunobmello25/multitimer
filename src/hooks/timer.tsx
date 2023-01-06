@@ -75,6 +75,26 @@ export function TimerProvider({
     );
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimers((old) =>
+        old.map((timer) => {
+          if (timer.started && !timer.paused) {
+            return {
+              ...timer,
+              current: timer.current - 1,
+            };
+          }
+          return timer;
+        }),
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timers]);
+
   return (
     <TimerContext.Provider
       value={{
