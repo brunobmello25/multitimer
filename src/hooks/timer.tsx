@@ -26,6 +26,7 @@ export function TimerProvider({
         default: duration,
         paused: false,
         started: false,
+        finished: false,
       },
     ];
 
