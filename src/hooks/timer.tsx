@@ -14,6 +14,8 @@ export function TimerProvider({
 }): JSX.Element {
   const [timers, setTimers] = useState<Timer[]>([]);
 
+  const anyRunning = timers.some((timer) => timer.started && !timer.paused);
+
   const addTimer = (name: string, duration: number): void => {
     const newTimers = [
       ...timers,
@@ -64,6 +66,7 @@ export function TimerProvider({
             current: timer.default,
             started: false,
             paused: false,
+            finished: false,
           };
         }
         return timer;
@@ -95,14 +98,23 @@ export function TimerProvider({
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (!anyRunning) return;
+
       setTimers((old) =>
         old.map((timer) => {
-          if (timer.started && !timer.paused) {
-            return {
+          if (timer.started && !timer.paused && !timer.finished) {
+            const result = {
               ...timer,
               current: timer.current - 1,
             };
+
+            if (result.current === 0) {
+              result.finished = true;
+            }
+
+            return result;
           }
+
           return timer;
         }),
       );
@@ -111,7 +123,7 @@ export function TimerProvider({
     return () => {
       clearInterval(interval);
     };
-  }, [timers]);
+  }, [anyRunning, timers]);
 
   return (
     <TimerContext.Provider
@@ -146,6 +158,7 @@ export type Timer = {
   current: number;
   started: boolean;
   paused: boolean;
+  finished: boolean;
 };
 
 type Value = {

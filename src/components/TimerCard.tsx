@@ -11,7 +11,11 @@ export function TimerCard({ timer }: Props): JSX.Element {
   const seconds = Math.floor(timer.current % 60);
 
   return (
-    <div className="flex flex-col rounded-xl bg-gray-500 p-3 text-white">
+    <div
+      className={`flex flex-col rounded-xl bg-gray-500 p-3 text-white ${
+        timer.finished ? 'animate-pulse' : ''
+      }`}
+    >
       <div className="col-start-3 col-end-3 flex justify-end gap-x-2">
         <IconButton
           icon={FiTrash2}
@@ -21,11 +25,9 @@ export function TimerCard({ timer }: Props): JSX.Element {
         />
       </div>
 
-      <div className="p-2">
-        <h3 className="col-start-1 col-end-3 text-center text-3xl font-bold">
-          {timer.name}
-        </h3>
-      </div>
+      <h3 className="col-start-1 col-end-3 overflow-hidden overflow-ellipsis p-2 text-center text-3xl font-bold">
+        {timer.name}
+      </h3>
 
       <div className="text-center text-3xl">
         {hours > 0 && `${String(hours).padStart(2, '0')}:`}
