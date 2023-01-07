@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext, useContext } from 'react';
+import { useEffect, useState, createContext, useContext, useRef } from 'react';
 import ShortUniqueId from 'short-unique-id';
 
 const uid = new ShortUniqueId({ length: 8 });
@@ -12,6 +12,10 @@ export function TimerProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  const audio = useRef<HTMLAudioElement>(
+    typeof Audio !== 'undefined' ? new Audio('/audio/beep.mp3') : null,
+  );
+
   const [timers, setTimers] = useState<Timer[]>([]);
 
   const anyRunning = timers.some((timer) => timer.started && !timer.paused);
@@ -59,6 +63,9 @@ export function TimerProvider({
   };
 
   const stopTimer = (id: string): void => {
+    audio.current?.pause();
+    if (audio.current != null) audio.current.currentTime = 0;
+
     setTimers(
       timers.map((timer) => {
         if (timer.id === id) {
@@ -110,6 +117,10 @@ export function TimerProvider({
             };
 
             if (result.current === 0) {
+              audio.current?.play().catch((e: Error) => {
+                console.log('error when playing audio: ', e);
+              });
+
               result.finished = true;
             }
 
