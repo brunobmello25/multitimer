@@ -4,8 +4,6 @@ A web app that allows you to handle multiple timers simultaneously. This idea ca
 
 ![GIF showcase](docs/showcase.gif)
 
-[Check it out](https://multitimer.brunomello.dev)
-
 ## Technologies used
 
 - React with NextJS
